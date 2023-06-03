@@ -15,6 +15,7 @@ def read_data(filename, key_word_a, key_word_b, key_word_expected):
 	expected_integar = get_json_data(filename)["expected_add_result"][key_word_expected]
 	for i in range(5):
 		data.append([integar_a[i], integar_b[i], expected_integar[i]])
+	print(data)
 	return data
 
 
@@ -29,3 +30,11 @@ class TestAdd():
 	def test_integar_add(self, a, b, expected):
 		result = calculator.add(a, b)
 		assert result == expected
+
+	@allure.story("a超出范围")
+	@allure.severity(allure.severity_level.CRITICAL)
+	@pytest.mark.parametrize("a,b,expected", read_data("test_data.json","outrange", "integar_inrange", "outrange"))
+	def test_a_intergar_outrange_add(self, a, b, expected):
+		result = calculator.add(a, b)
+		assert result == expected
+
