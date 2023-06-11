@@ -4,39 +4,39 @@ import allure
 from hogwarts.pytest_HM.func.operation import Calculator
 from hogwarts.pytest_HM.utils.read_data import get_json_data
 
-calculator = Calculator()
 
-
-def read_data(filename, key_word_a, key_word_b, key_word_expected):
-	data = []
-	integar_a = get_json_data(filename)[key_word_a]
-	integar_b = get_json_data(filename)[key_word_b]
-	expected_integar = get_json_data(filename)["expected_add_result"][key_word_expected]
-	for i in range(5):
-		data.append([integar_a[i], integar_b[i], expected_integar[i]])
-	return data
-
+def get_data(level):
+	json_data = get_json_data("test_data.json")
+	print(json_data)
+	return json_data[level]
 
 @allure.epic("测试计算器")
 @allure.feature("测试计算器加法")
 class TestAdd():
 
+	def setup_class(self):
+		self.calculator = Calculator()
+
 	@allure.story("整数之间的加法")
 	@allure.severity(allure.severity_level.CRITICAL)
-	@pytest.mark.parametrize("a,b,expected", read_data("test_data.json", "integar_inrange", "integar_inrange", "integar_inrange"))
+	@pytest.mark.parametrize("a,b,expected", get_data("P0"))
 	def test_integar_add(self, a, b, expected):
-		result = calculator.add(a, b)
+		result = self.calculator.add(a, b)
 		assert result == expected
 
-	@allure.story("a超出范围")
+	@allure.story("a/b超出范围")
 	@allure.severity(allure.severity_level.CRITICAL)
-	@pytest.mark.parametrize("a,b,expected", read_data("test_data.json","outrange", "integar_inrange", "outrange"))
-	def test_a_intergar_outrange_add(self, a, b, expected):
-		result = calculator.add(a, b)
+	@pytest.mark.parametrize("a,b,expected", get_data("P1"))
+	def test_outrange_add(self, a, b, expected):
+		result = self.calculator.add(a, b)
 		assert result == expected
 
-	@allure.story("测试命令行传参")
-	# @pytest.mark.parametrize()
-	def test_option(self):
-		pass
+	@allure.story("非数字")
+	@allure.severity(allure.severity_level.NORMAL)
+	@pytest.mark.parametrize("a,b,expected", get_data("P2"))
+	def test_non_number_add(self, a, b, expected):
+		with pytest.raises(eval(expected)) as e:
+			result = self.calculator.add(a, b)
+			assert e.type == TypeError
+
 

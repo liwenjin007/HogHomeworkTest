@@ -16,5 +16,4 @@ def get_json_data(file_name):
 
 if __name__ == '__main__':
 	data = get_json_data("test_data.json")
-	# print(data, type(data))
-	print([data["expected_add_result"]["integar_inrange"]])
+	print(data, type(data))

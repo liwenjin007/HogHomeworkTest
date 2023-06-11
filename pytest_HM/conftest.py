@@ -26,14 +26,14 @@ def pytest_addoption(parser):
 file_path = Path(__file__)
 data_path = Path(file_path.parent, "test_data")
 
-@pytest.fixture(scope="class", autouse=True)
-def cmdoption(request):
-	env = request.config.getoption("--env", default="test")
-	if env == "test":
-		file_name = "test_data.json"
-	elif env == "online":
-		file_name = "test_data2.json"
-	return str(file_name)
+# @pytest.fixture(scope="class", autouse=True)
+# def cmdoption(request):
+# 	env = request.config.getoption("--env", default="test")
+# 	if env == "test":
+# 		file_name = "test_data.json"
+# 	elif env == "online":
+# 		file_name = "test_data2.json"
+# 	return file_name
 	# with open(Path(data_path, file_name), "r", encoding="utf-8") as f:
 	# 	data = json.loads(f.read())
 	# 	return data
