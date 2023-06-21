@@ -2,11 +2,11 @@ import pytest
 import allure
 
 from hogwarts.pytest_HM.func.operation import Calculator
-from hogwarts.pytest_HM.utils.read_data import get_json_data
+from hogwarts.pytest_HM.utils.read_data import Utils
 
 
 def get_data(level):
-	json_data = get_json_data("test_data.json")
+	json_data = Utils.get_json_data()
 	print(json_data)
 	return json_data[level]
 

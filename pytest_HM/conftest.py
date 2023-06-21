@@ -13,7 +13,7 @@ import pytest
 # parser.add_argument("--b", type=int, default=0)
 # 获取所有命令行参数
 # args = parser.parse_args()
-
+global_env = {}
 def pytest_addoption(parser):
 	my_group = parser.getgroup("hogwarts")
 	my_group.addoption(
@@ -26,18 +26,10 @@ def pytest_addoption(parser):
 file_path = Path(__file__)
 data_path = Path(file_path.parent, "test_data")
 
-# @pytest.fixture(scope="class", autouse=True)
-# def cmdoption(request):
-# 	env = request.config.getoption("--env", default="test")
-# 	if env == "test":
-# 		file_name = "test_data.json"
-# 	elif env == "online":
-# 		file_name = "test_data2.json"
-# 	return file_name
-	# with open(Path(data_path, file_name), "r", encoding="utf-8") as f:
-	# 	data = json.loads(f.read())
-	# 	return data
-
+def pytest_configure(config):
+	default_env = config.getoption("--env")
+	tmp = {"env": default_env}
+	global_env.update(tmp)
 
 def pytest_collection_modifyitems(items):
 	for i in items:
